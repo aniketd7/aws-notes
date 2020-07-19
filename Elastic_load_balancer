@@ -1,0 +1,182 @@
+Elastic Load Balancer (ELB)
+ELB serve the traffic inside region only. If you still want to use for muiltiple region then with the help of route 53 you can do that.
+- An Internet facing load balancer has a publically resolvable DNS name
+- ELB supports ipv4 address only in a vpc
+- ELB can connect to as many AZ. but inside Az it can connect any one subnet
+- the CIDR range should not be greter than /28
+- aws reservs 5 ip address in each subnet
+- also it recommand apart from this it should keep 8 more ip's free for elb for future use.
+- for fault tolarance it is recommand that you distribute your register Ec2 instance across muiltiple AZ within the vpc region 
+- if possible try to allocate same no.of instance in each AZ.
+- ELB name which you choose to set should be unique within the account.
+- ELB is region specific
+- To define your ELB in an AZ you can select one subnet in that AZ. subnet can be public or private
+- If you register an instance in an Az with elb but do not define the subnet in that AZ for the elb, these instance will not be receive 
+traffic from elb
+- ELb should always access through DNS name and not through the ip.  
+Load balancer comes with 3 types
+1. Application Load Balancer - This runs on layer 7 -- supports http/https 
+2. Network Load Balancer (works on layer 4 in OSI model -- Transport) -- support tcp/udp/tls
+3. Classic Load Balancer  (this is also called now previous generation) -- this runs on both layer 4 and 7 -- support http/https/tcp/ssl support ipv4 ipv6  
+
+Elastic Load balancer can be 
+1.internet facing 
+OR
+2.Internal ELB
+
+Internet Facing:
+- ELB nodes will have public ip address.(this elb nodes are virtual, we cant see them or we don't need to configure it)
+depending on the load elb nodes gets created and out 8 ip's which are reserved for ELB that ip gets assign to the elb node.
+- you need one "Public subnet" in each AZ. where the internet facing elb will be defined 
+
+In internal ELB name of elb start with internal where as in internet facing ELB you will not see internal name to the ELB
+
+Features:
+1. Elastic
+if traffic is very high the elb also handle the additional capacity, it scales up or down depending on the web traffic.
+2. Secure
+can handle DDOS attack
+3. ingration
+we can integrate with any server
+4. cost effective
+
+- It supports SSL termination
+- Elb is specific to vpc. the target machine and elb should be on same vpc
+-  Elb will balance the load within the region only. it can not send the load balance across muiltiple region.
+But we can balance the load in muiltiple availability zone 
+- If you want to load balance across muiltiple regions we can do that with help of route 53
+- Load balance over ec2 instance with in vpc
+- supports both public and private ip 
+- full control over the load balancer security group
+- it also health checks of the server.
+
+Health check:
+- Elb perform health checks to make sure it want to routes only healthy instances.
+- Health check supports tcp, http, https health check
+- by default aws console uses ping http(80 port) for health check
+- aws API uses  ping TCP (port 80) for health check  
+- registered instances must response with the HTTP "200 ok" message within the timeout period, otherwise it will
+consider as unhealthy.
+- Resopnse time out is 5 seconds bydefault for health check. we can set range from 2sec to 60 sec
+
+Health check interval :
+this is the time between health check.
+for ex: suppose elb sends 1st ping req. to ec2 instance and elb gets the response also. now after how much time interval 
+it will send second req. to check health of ec2
+- default health check interval is 30 sec.
+ we can set range from 5 sec to 300 sec
+
+Unhealthy threshold:
+- no.of consecative Failed health check that should occure before the instance is declare unhealthy
+- if you get  2  consecative failed health check then elb declare it as a unhealthy instance.
+Default is 2. but you can set between 2 to 10
+
+Healthy Threshold:
+No. of consecutive Successful health check that should occure befor the instance is declare as healthy.
+Default - 10
+range between 2 sec to 10 sec 
+
+Idle timeout:
+- connection will get close by the load balancer when no longer in use.
+i.e. if some one access the site and after that the connection is idle for given time then that connection will get close
+- Default  value is 60 sec and we can set between 1 to 3600
+
+Listeners:
+- An ELB listener is the process that check for connection request.
+- You can configure the protocol / port no on which your ELB listener will listen for connection request.
+- There are 2 type of listner front end listener and Backend Listener. Both are virtual, you cant see them or 
+you dont need to configure. its virtual.
+- Fornt end listener check for the traffic from client to listener
+i.e. when any request come on listener that will handle by front end listener
+- Backend listener are configured with protocol / port to check for traffic from the elb to the ec2 instance.
+i.e. backend listner recevied the traffic from frontend listener and backend listener will forward traffic on ec2 instance
+- It may take some time to regeister the ec2 instance with elb.
+- Register instances are those that are defined under elb.
+i.e. elb will send traffic only on register instances. if there are other instances and that are not register with elb
+then on that instances traffic will not send.
+- ELB has nothing to do with outbound  traffic that are initated / generated from the ec2 instance.
+- ELB only has to do with inbound traffic to the registered ec2 instance. and response to the same request.
+- you start chare hourly once your elb is active.
+- when u delete the ELB, it will not delete the registered ec2 instance.
+- ELB forward the traffic to the eth0 of your registered ec2 instance.
+- If you have muiltiple ip address on eth0, elb will route the traffic on primary ip address.  
+- Defines the protocol and port on which elb listens for incoming connctions.
+- Each elb needs at least one listner to accept incoming traffic and can support upto 10 listners 
+- routing ruls are defined on listners
+
+Rules:
+-  provide the link between listners and target group and consist of conditions and actions
+-  when a request meets the condition of the rule, the associates action is taken
+-  rules can forward req. to specified target group
+- condition can be specified in path pattern format.
+
+Target Groups:
+- logical load balancing target which can be an ec2 instance, microservices, container based appliction
+- Target group can contain upto 200 targets
+- Target group can be associate with ASG(auto scaling group)
+Target
+- Inside target grpoup each instance or micro service is a target.
+it is devided into 3 types 
+	-ip based
+		we can only specified below CIDR range
+		10.0.0.0/8
+		100.64.0.0/10
+		172.16.0.0/12
+		192.168.0.0/16
+		You can  not specified public ip as a target
+	
+	- instance based
+	- lambda based
+
+
+High Availability
+ when you try to build elb always use muiltiple AZ's 
+
+Cross zone balancing:
+ 
+By default ELB distribute traffic evenly between the AZ's. even if there is not equal amount of ec2 present on each AZ.
+i.e. if you have register 2 AZ's in elb and in 1 AZ 2 ec2 present and in another AZ only 1 ec2 present.
+so AZ 1 will manage traffic vary easily as compare to AZ 2. Still in this case ELB will not bother about load on ec2 it will 
+simply distribute traffic on no.of AZ's which is registered in ELB.
+
+So, to manage traffic evenly on EC2 then we need to enable Cross Zone Balancing 
+-it is DIsabled bydefault
+- When we enabled it, it will distribute traffic equally on all the instance. (instance in AZ1 and instance in AZ2)    
+if you enabled this cross zone balancing then elb can communicate across muiltiple AZ.
+No additional bandwidth charge for cross zone trafifc 
+
+Connection Draining
+When an instance is terminated bcos of scale in policy or bcos of an unhealthy instance then ELB will stop sending 
+the req on that perticular instance, but it should not close the open connections immedietly.
+so, connection draining gives some time to complete the open connection.
+  
+Logical Flow:
+ELB --> Listner --> Rules --> target group (ec2 or ecs ) --> health check
+
+- ELB comes under VPC 
+- ELB serve the traffic in muilti AZ
+
+Application ELB
+In this we can set load balancer depending on PATH BASE, Host Base 
+https://www.youtube.com/watch?v=L4tDC72uv3s
+
+elb https link
+https://www.youtube.com/watch?v=E5MYky95atE
+
+
+--------------------------------------------
+Establish Load Balancer Between 2 VPC
+--------------------------------------------
+
+1. create 2 vpc i.e. vpc1 and vpc2
+2. create 2 subnet in vpc1 and one in vpc2
+As we can not connect 2 vpc to load balancer also we require atleast 2 AZ in primary vpc (the vpc in which we will connect elb)
+in vpc 2 we can create 1 subnet in Az or we can create multiple also if we want. here we are creating only on subnet in Az for vpc2
+3.  create internet gateway (igw) for vpc1 and vpc2
+4. edit route table and add 0.0.0,0/0
+5. create peering connection and update route table.
+6. create 3 ec2 instance. on in each subnet
+7. install apache and create index.html page
+8. create application load balancer (ALB), here we will use target type - IP out of 3 options i.e. instance , ip , lambda 
+9. registered private ip of each ec2 instance in target group 
+10. copy dns of load balancer and paste in web browser.

@@ -1,0 +1,154 @@
+- What is cloud ?
+It is a sharing of resources from remote location via internet on pay as you go model.
+
+Charecteristics of cloud
+1. On demand self service
+2. Broad N/W Access
+3. Scalability 
+4. Resource Pooling
+5. Measured Services  --- Stats memory utilisation, cpu utilisation etc.
+
+Services in Cloud
+
+AWS provides 3 type of services
+1. IAAS - (Infrastructure As A Service)
+2. PAAS- (Platform As A Service)
+3. SAAS- (Software As A Service)
+
+
+Below 9 are  the Layers
+------------------------
+Application 
+------------------------
+Data
+------------------------
+Runtime
+------------------------
+Middleware
+------------------------
+O.S
+------------------------
+Virtualisation
+------------------------
+Server
+------------------------
+Storage
+------------------------
+Network
+------------------------
+
+1. IAAS
+It contains  Network, Storage, Server, Virtualisation, O.S these service.
+i.e. We are using these services from cloud
+that means we are using serves from cloud and we are installing or managing our software and app
+Ex: ec2, 
+Amazon Simple Storage Service (Amazon S3)
+Amazon Elastic Block Store
+AutoScaling
+Elastic Load Balancing
+Amazon Redshift
+IaaS examples: AWS EC2, Rackspace, Google Compute Engine (GCE), Digital Ocean, Magento 1 Enterprise Edition*.
+
+2. PAAS
+it contains all the IAAS service with two more service like Middleware & Runtime
+Here we are using servers and some manegd platform by cloud 
+ex: lambda, Beanstalk
+PaaS examples: 
+AWS Elastic Beanstalk, Heroku, Windows Azure (mostly used as PaaS), Force.com, 
+OpenShift, Apache Stratos, Magento Commerce Cloud.
+
+3. SAAS
+It contains all the layers form Network to Application
+i.e  we are using all the service from cloud
+
+SaaS examples: 
+BigCommerce, Google Apps, Salesforce, Dropbox, MailChimp, ZenDesk, DocuSign, Slack, Hubspot
+
+Infrastructure as code (IaC) 
+
+Infrastructure as code (IaC) means to manage your IT infrastructure using configuration files.
+Tools:
+AWS CloudFormation
+Azure Resource Manager
+Google Cloud Deployment Manager
+Terraform
+Configuration management tools (Ansible, Saltstack, Chef, Puppet)
+
+
+Deployment Model Of Cloud
+
+It consist of 3 type
+1. Public Cloud
+This cloud is publically available, i.e any one can create a infrasturcture in these cloud
+ex. aws, azure, google private cloud etc 
+
+2. Private Cloud
+This is also called enterprise cloud. which means some enterprise or any company which has created a cloud for its own employee or branch
+its not available apart from that company
+
+3. Hybrid Cloud
+which consist of both private and public cloud
+which means if you have created private cloud and you have somthing on public cloud then using hybrid cloud you can merge these cloud and 3rd person can access both 
+pri are and public in single connection
+
+
+Virtualisation
+
+You can virtualize  Network, Storage, Server  using hypervisor 
+there are some company who provides hypervioser
+Microsoft hyperviosr name is HyperV
+AWS uses Ctrix 
+Vmware uses VsphereESXi
+
+*** Configuration Management Tools
+
+Ansible (written in python)
+Saltstack (Written in python)
+Chef (Written in Ruby)
+Puppet (Written in Ruby)
+CFEngine (Written in C)
+
+*** Version Control Tools
+Git
+SVN
+Mercurial
+
+Repositories OR Git Services
+Gogs
+GitLab
+GitHub
+BitBucket
+Google Cloud Source Repositories
+AWS CodeCommit
+
+*** Project Management and Bug Tracking Tools
+Jira
+Active Collab
+
+*** Build Tool
+Apache Ant
+APache Maven
+Gradle
+Hudson
+
+*** CI/CD Tools
+Jenkins
+Travis CI
+Bamboo
+Codeship
+CircleCI
+
+*** Container Management Tools
+Docker
+Kubernetes
+Amazon Elastic Container Service (ECS)
+Azure Kubernetes Service (AKS)
+
+
+Good hands-on knowledge of Source Code Management (Version Control System) tools like Git and Subversion
+Proficient in developing Continuous Integration/ Delivery pipelines
+Experience with automation/ integration tools like Jenkins
+Knowledge of major cloud service providers, like AWS, Azure etc.
+Good understanding of Infrastructure as Code (Programmable Infrastructure), and how you can achieve that by using tools like Puppet, Chef, Ansible etc.
+Hands-on knowledge of software containerization platforms like Docker and container orchestration tools like Kubernetes and Docker Swarm
+https://www.kickresume.com/en/help-center/lead-devops-engineer-resume-sample/

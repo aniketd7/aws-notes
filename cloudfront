@@ -1,0 +1,89 @@
+AWS CLoudFront
+
+amazon cloudfront is a web service that gives business and web application developers an easy and cost effective way 
+to distribute content with LOW LATENCY and high data transfer speed.
+
+
+What is Edge Location and Regional Edge Cache 
+
+- CloudFront is a global service (not created in region)
+- Cloudfornt is a web service that speed up distribution of static and dynamic web content.
+  like html,css,js and image file to your users.
+- Cloudfront delivers your content through a worldwide network of data centers called Edge Locations.
+- When user request content that you are serving with cloudfront, the user is routed (via DNS) to the
+  edge location that provides the lowest latency, so that content is delivered with the best possible
+  performance..
+- if the content content is already in the edge location with lowest latency cloudfront deleivers it 
+  immediately 
+- if not, then cloudfront retrives it from an Origin server, where we have host the server.
+- Cloudfront also keeps persistence connection with origin server so files are fetched from the origin 
+  as quickly as possible.
+
+You can access CloudFront (CF) from following ways.
+1. aws mgmt console
+2. aws SDKs
+3. CloudFront API
+4. Aws command line interface
+
+CloudFront Edge Location
+- Edge Locations are not tied with AZ's or regions
+- Amzon cloudfront has 216 point of presence (205 edge location and 11 Regional Edge Location)
+  in 84 cities across 42 countries.
+
+Regional Edge Cache
+generally these 11 regional edge cache are present in city where amazon regions are present
+like mumbai, ohio etc 
+Normally use of this Regional Edge cache is, when edge location is serving the data so when it deletes the cache 
+(defult value is 24hrs) it sends less popular data to this regional edge cache. so when after removing and sending 
+the data if any user request for this data it takes this data from regional edge cache instead of origin server.
+
+Regional Edge Cache is also cache memory and also work as a edge location but the cache value is higher than 
+edge location
+In short when the data is less popular then edge location will send to regional edge location.
+If the regional edge cache also dont have that data (or deleted the cache) then edge location will requst to origin server.
+
+- Regional edge cache working as a alternative of origin to reduce the burden of origin.
+
+Working
+ 1. user request a page
+ 2. request goes to DNS(route53)
+ 3. DNS forward req. to nearest edge location (base on latency)
+ 4. in the edge location CF check its cache for the requested files
+ 5. IF the files present in the cache the returns to the requested user.
+ 6. if files not present in cache then edge servers go to nearest regional edge cache to fetch the object.
+ 6. Regional edge cache has feature parity with edge location.
+ for ex: a cache invalidation request removes an object from both edge cache and regional edge cache before its expire.
+ Invalidation Request means if user request for some deletion req. then it will get remove from both.
+ 7. the next time a viewer request the object, CF returns to the ORIGIN to fetch the latest version of object.
+ 
+ NOTE:
+ - proxy method PUT/POST/PATCH/OPTIONS/DELETE go directly to the origin from edge location and do not proxy through 
+   regional edge cache
+ - Dynamic content as determine at request time does not flow through the regional edge cache but goes directly to origin.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+https://app.resumegenius.com/resume-builder/start 
+select windsor theme

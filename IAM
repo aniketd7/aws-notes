@@ -1,0 +1,94 @@
+LIMITS
+- IAM user limit is 5000. i.e u can maximum create 5000 users.
+- You can create 300 groups per aws account
+- You are limited to 1000 IAM roles under aws account
+- Default limit of managed policies attached to an IAM role and iam user is 10
+- IAM user can be a member of 10 groups.
+
+FEATURES
+
+1. Shared access to your aws accounts.
+- we can share access by creating a users.
+
+2. Granullar Permission
+-  we can create different permission to different user for different resources
+ex. for instance we can give complet access to ec2, s3, redshift while to others we can give read only access
+
+3. Secure access to aws resources for applications that run on amazon ec2
+You can use IAM features to secuerly give application that run on ec2 instance, the credentials that they need 
+in order to access other aws resources 
+ex. for ec2 instace we have attached s3 bucket or RDS then we can restrict not to use these attached resources
+
+4. MFA (Multifactor authentication)
+you can add MFA to you accunt.
+
+5. Identify federation
+instead of creating user in iam you can use Active Directory or LDAP or any 3 party software such as google(gmail), Facebook 
+throuch which we can login
+
+6. Identify information assurance 
+who access what resources at what time we can check this
+if u use cloudtrail you receive log records that include information about who access what resources in your account.
+this information is based on IAM identities 
+
+7. PCI- DSS Complaince 
+AWS supports processing, storage and transmission of credit card
+
+8. Evantually Consistent
+IAM is highly available. If you do any changes on IAM and save that change, this change must be replicate  across IAM whcih can take some time.
+ 
+- IAM is free to use. 
+
+
+IAM TERMS
+1. Principal
+The on who is doing the activity or action on resources.
+thhis could be User,role,  application , or federated user (3rd party user).
+
+2. Request
+Normally principal send a request 
+ex. principal tell to create  a ec2 instance. so this is the request
+Normally request includes below things
+action , resources , principal , enviornment data, resource data.
+ex- when principal send request for creating ec2 instance
+here creates new ec2 instance this is the REQUEST
+creating is the Action 
+ec2 instance is RESOURCE 
+the req is sent by PRINCIPAL
+Env Data means - includes principals ip address, permissions etc
+Resource data meain - which bucket we are using, which region we are using etc. i.e resource related data
+
+3. Authentication
+which means it check the  id and password is correct or not. it will authenticate. if its give the proper credentials then 
+it forward to authorisation 
+
+4. Autharization
+once it check that the user is authenticated then it check what autherization (rights)it have. i.e what resources he can access
+
+5. Action / operation
+this is whta pincipal has requested.
+i.e if Principal request for creating ec2 instance then creating instance is an action 
+
+6. Resources
+on which the action is perform. here instance is resource
+
+
+You can create a new policy in aws console using one of the following ways
+1. JSON -- you can create your own json syntax
+2. Visual Editor - u can create policy using this editor in this it will create policy  in json format we dont need to remember JSON syntax
+3. IMPORT - You can import the pocliy from existing policy. 
+
+
+Resourece based policy we can assign to only these resources
+- Amazon S3
+- Amazon Simple Notification Services (SNS)
+- Amazon Simple Queue Service (SQS)
+- Amzon Glacier Voult
+
+For others we need to assign Role Based Policy 
+
+Truseted Account
+It is the account from which user will access the other account resources
+
+Trusting Account
+This is the Account from whic resources will be access from othe account's user

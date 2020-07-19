@@ -1,0 +1,249 @@
+Auto scaling
+It is region specific. All server should be in same region
+Remember: 
+Scaleout / scaleup : increase the no.of server
+Scalein / scaledown : decrease the no. of server.
+
+- Horizontal scaling 
+means that you scale by adding more machines into your pool of resources
+
+- Vertical scaling 
+means that you scale by adding more power (CPU, RAM) to an existing machine.
+
+- Its a logical group of ec2 instances which participate in auto scaling
+
+Auto Scaling Components:
+
+1. Launch Configuration:
+	like instances, AMI, keypair, security group
+
+2. Auto Scaling Group:
+	group name, group size (server size min to max), vpc, subnet, health check, 
+
+3. Scaling Policy
+	matrix type (on which condition no. of server increase or decrease) , target value
+
+
+- ASG (Auto Scaling Group) always try to balances instance across AZ's
+- While rebalancing ASG launches new EC2 instances where there are less EC2 at present.
+and then terminate the instance from the AZ's that had more instances.
+
+** What causes Imbalance of EC2
+- If we add or remove some subnet / AZ's from auto scaling group.
+- if we manually request of EC2 termination from ASG (Auto Scaling Group)
+- An AZ that don not have enough EC2 capacity now has enough  capacity and it is one of the 
+our ASG AZ 
+i.e . some might be case that one of the AZ reached max ec2 instance creation capicity.
+and now we cant make an ec2 on that Az. that time imbalance of EC2 occures in ASG.
+
+
+- We can attached a running ec2 instances to an ASG by using AWS console or AWS cli
+if the below conditions are met.
+
+1. instances must be running state (Not Terminated Or Stopped state)
+2. AMI used to launch the EC2still exist.
+3. Instance is not part of another ASG.
+4. Instance is in the same AZ of the same group.
+i.e. Whatever the AZ we have attached in the ASG the instance we want to add in group should be in that AZ only.
+for ex. if we have total 3 az in a region and we have just attached 2 az to the ASG. and we want to add instance
+which is in 3rd az. then we cant add that instance to ASG
+5. if the existing EC2 instances under the ASG, plus the one to be needed. if that exceeds the max capacity of the ASG,
+then, the request will fail and EC2 instance would not be added.
+i.e. when we create ASG, that time we need to define max and min value of the server which will increased or decreased accordingly.
+but if the max value is already exceeded and you want to add more instance that time you cant add the EC2 instance.
+
+Also Note: even if you have reached max value of instance and ASG needs to balance the instance across the AZ's
+ONLY THAT TIME  it can exceed the max value. but the condition is it can increase 1 instance or 10% of max value
+whichever is greater.
+
+
+** What is the impact of attached /detached instance or Deleteing ASG.
+1. you can manually remove EC2 instances from ASG using AWS cli or console.
+2. you can then manage the detached instance independently or attached it to another ASG
+but Remember 1 instace can be attched to ONLY ONE ASG at a time.
+3.  when u detached an instance you have option to decreased the ASG desired capcity.
+Desired capacity  means, in an ideal state how many minimum instances will run.
+supposed you have spcecified 2 and if you detachecd the instance tgen it become 1 at that time ASG will again create new instance
+if you dont want to create ASG to new create instance then at the time of decreasing the instance you will get an option. 
+4. when you delete an autoscaling group its parameter like max, min and desired capacity is set to zero. Hence it terminate
+all the instance
+
+- Auto scaling group has some attributes like
+1. Min size
+	when we create a group we can specify minimum size which is minimum no. of ec2 instance the group should always have,
+2. Max size
+	the maximum limit upto which auto sacling can scale ec2 instances
+3.Desired capacity
+	this value is decided at run time based on low o/p of env
+	it changes based on scaling capacity
+ We need to tell auto scaling when to add server and when to remove server we do with the help of scaling policy
+
+*** How ELB work with Auto Scaling Group ASG
+- we can attached one or more ELB (Elastic Load Balancer) to ASG.
+- The ELB must be in the same region as ASG.
+- once you attched ELB, any ec2 instance existing or added bt the ASG will automatically registered with ASG define in ELB
+i.e as soon as we attached ELB to ASG. after that any new EC2 instance created will automatically get registered to ELB.
+EC2 instance exist before attaching ELB we need to registered manually. same as if we delete ec2 instance it will deregistered from ELB 
+- once you attached ELB then you do not need to register thos instances manually on the ASG define ELB
+- instance and ELB must be in the same VPC.
+
+*** Health check of EC2 instance in ASG
+- ASG classifed ec2 instance in 2 status healthy or unhealthy
+-  By default ASG uses EC2 status check only to determine the health status of an instance
+i. by default ASG uses ec2 health check to define healthy or unhealthy.
+-  When you have one or more ELB define in ASG. you can configure ASG to use BOTH the ec2 health check and ELB health check to 
+determine the instance healthy or unhealthy.
+- health check grace is 300sec by default.
+i.e. it will wait 300 sec once the instace start for heath check
+- if we set health check grace period to zero. then the instance health is checked once it is in service.
+- Until the health grace period timer expires any unhealthy status reported by EC2 or ELB status check to the ASG will not be acted upon.
+i.e before 300 min grace period expire if ASG get status fromec2 or ELB health check it will not be considered.,
+
+*** After Grace period expires, ASG would consider an instance unhealthy in any of the following cases.
+1. EC2 status check report to ASG an instance state other than running
+i.e  apart from running instance any state ASG considered as unhealthy.
+2. if you have configured ELB health check to be used by ASG, then if ELB report the instance "Out of Service"
+3. In case of termination of unhealthy instance, first it will terminate unhealtht instance then it will create new instance.
+Where as in rebalancing first it create new instance then it terminate the instance.
+4. Elastic IP and EBS volume gets detached from the terminated instance. you need to manually attached to the new instance   
+
+
+*** In four situation ASG sneds a SNS email notification.
+1. An instance is launched
+2. An instance is terminated
+3. An instance fails to launch
+4. An instance fails to terminsated
+
+Merging ASG
+means if you have 3 Az's and one ASG1 using in az-1
+and another ASG2 using az-2 and az-3.
+Now you will add az-2 and az-3 to ASG. so now ASG become az-1, az-2, az-3
+and ASG2 become az-2, az-3
+after that you will delete ASG2. this way you can merge ASG.
+
+- It can only be done from CLI. you can not do it from AWS console.
+- Scale-out means launching more ec2 instance
+- Scale-in means terminating one or more ec2 instance by scaling policy
+
+*** Aws ec2 instance sends matrics to cloudwatch about thhe ASG instance
+- basic monitoring is (every 300 sec ) enabled by default & free of cost)
+- detailed monitoring is (every 60 sec) and chargeble.  
+- when launch configuration is done by aws cli then detailed monitoring is enabled by default.
+
+
+*** Standby state
+when we want to do some certain changs on server or patching etc. in ASG then you cant do it 
+you need to put some instance in standby
+
+what are the points for standby state
+-you can manually move ans instance from ASG and put in standby state
+- instance in standby state are still manged by autoscaling.
+-  instance in standby state are charged as normal , inservice instance
+-  they do not count towards available ec2 instance for workload or app use
+- ASG does not perform health check on instance in standby state 
+
+-- *** Scaling Policy
+- defines how much you want to define to scale based on defined conditioned 
+- Auto scaling uses alarm and polices to determine scaling 
+- in simple and step scaling policy a adjustment cant change the capacity of the group above the max size and min size group.
+i.e. if we set max size 10 and min size 2 then even if the load goes high after adding 10 instance it will not add more than 10.
+same as if load goes down it will keep deleteing the instances but it will keep minimum 2 instances in ASG
+1. Manual Policy 
+In this if you set "Keep scaling policy as it is" then if Desired value if it set to 4 then all the value will be same as desired policy. If you want to
+change then u need to do it manually.
+for.eg. If u set the desired value 4 then max. server value will also be 4 and min server value will also be 4. 
+Even if the server load increase or decrease.
+
+2. Dynamic Policy
+It devided into 3 types
+a. Target Tracking Policy
+In this you need to define some valule. ASG will try to maintain remain close to this value as much he can.
+for ex. if you set cpu utilisation to 70%. Then ASG group will maintain 70% load accross the all server.
+To maintain cpu utilisation ASG will scale-out or scale-in and always try to close to this value.
+
+b. Simple Scaling Policy
+In this we can define the threshold value. if this value exceeded then it will create no.of instance as mentioned.
+for ex. if we define threshold value 75%. once this value exceeded it will create the instance. if we have mentioned that
+once this value above 75% then create 2 instance. then 2 instance will get created.
+
+Here on two values we need to concentrate
+1. Cooldown Period
+2. Warm-up period
+In both the value ASG need to wait.
+Cooldown means -  Once threshold value reached ASG create instance, after creating the instance ASG wait till value mentioned
+in cooldown period. it will check newly created instance working properly, managing the load or not.
+Meanwhile whatever alarm will received that will ignored. even if the value of theshold is still exceeded then also it will not create 
+new instance. Once cooldown period exceeded after that if ASG will receive alarm or threshold value is above 75% then it will create new instance.
+
+Warm-up period means once after threshold value exceeded, new instance will spinup. and ASG will wait till value mentioned in warmup period to start the instance.
+for ex:suppose we have mentioned 300 sec in warm up period , then once ASG created new instance it will wait 300 sec to start the instance     
+
+
+c. Step Scaling Policy
+Here you will see "Add step" button 
+here we can decide step by step. i.e. if my load in between 40-50% then create one instance 
+if my load 51 to 60% then create 2 instance 
+if load 61- 70% then create 2 more instance
+similarly for scale in we can define if load goes 50 -605 then remove 1 instance
+if load comes down to 40 -50 then remove 1 instance
+if load comes to 30-40% then remove 2 instances.
+
+In step scaling policy cooldown period is not use.
+
+- Launch Configuration
+You can not edit the launch configuration. Either you can delete or copy but can't edit once created.
+it is a template which is used by auto scaling group for adding new instances to the group
+This Launch configuration  have some details like
+1. AMI
+SO, which AMI will use while launching new instance
+2. Security group
+3. EBS size and type
+4. IAM role
+5.private key
+
+- Auto Scaling group
+Once we done with Launch Configuration, then we need to configure Auto Scaling Groups.
+- Autoscaling group uses this launch configuration to launch the ec2 instance into the group.  
+In ASG there are 5 stpes 
+a. configure Auto Scaling Group Details
+b. Configure Scaling Policies
+c. Configure Notifications
+d. Configire Tages
+e. Review
+
+ ASG have some details like
+a. configure Auto Scaling Group Details
+1. Group Name:
+Give ASG group name 
+2. Launch Configuration:
+Here it will show the name of launch configuration which we have created earlier.
+3. Group Size:
+Here we will give the no. of instance with which ASG will start.
+i.e. if we give 2 here. then ASG will spinup 2 instance in the begining.
+4. Network:
+Here we need to decide on which VPC ASG will create, you can select default or if you want to create ASG
+in new VPC then give the custom vpc name here.
+5.  subnet:
+here we heave to select subnet with AZ's on which our ec2 will be created.
+
+b. Configure Scaling Policies
+here you will see 2 options
+1. Keep this group as it's initial size  (this means Manual Scaling)
+in this whaterver Group size you mentioned in "configure Auto Scaling Group Details" it will remin as it is. i.e even if load goes high it will not ancrease 
+server automatically also if server load goes down it will not minimize the server. we need to do it manually.
+
+2. Use scaling Policies to adjust the capacity of this group.  (Dynamic Scaling)
+-in this it will ask scale between no. of server. here we need to mentioned min instance and max instance in between ASG will scale-out and scale-in
+- Scale Group size
+in this we need to mentioned below details
+- Name: here we need to specify group name.
+- Metric Type: here we need to mentioned in which scenario instance will scale-out or scale in
+there are 4 option we will have 
+1. Application Load Balancer Request Count Per Target
+When load balance notifies that lot of load coming on every server that time it will scale-out(increase) the server
+2. Average CPU uitilisation
+When CPU utilisation get increase
+3. Average Network IN (Bytes)
+if server n/w input greater than mentioned value.
+4.Average Network Out(Bytes)
+if server n/w out is greater than mentioned value.

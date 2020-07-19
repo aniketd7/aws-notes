@@ -1,0 +1,165 @@
+EC2
+
+AMI -- 
+A template for creation of ec2 instance
+it is an image of a server including a OS and often additional software
+
+1. what is root disc type in ec2 ?
+ 2 types of root device 
+A. Elastic block storage (EBS)
+Used to store persist data
+B. Instance store
+used for testing purpose and data does not store persist data. if we start / stop server  data will be lost.
+These type of server only used for testing purpose
+
+2. how to take backup of ec2 machine
+using snapshot (taking snapshot of volumes)
+
+3. how to restore backup 
+restoration of volume u can create volume of your machine or you can create AMI
+
+4. When we can create AMI
+if you want to scale our infra
+
+5. Can we scale ec2
+using vertically or horizontally
+veritically means increse the resources of an instance
+horizontally means increase no of instances 
+
+6. what is automation tool we used for ec2
+AWS API tool used for aws automation
+we can use these api using muiltiple tools like chef, puppet,ansible or terafarm
+
+7. What if i want to maintain state of my infra
+using terafarm
+
+8. How to secure your server 
+using Security Group
+using ACL
+
+9. how many volume types are there
+there are 5 type of volumes
+general purpose ssd (gp2)
+provision iops 
+cold hdd
+throughput optimise HDD
+Magnetic
+
+10. ec2 instance type
+***  General Purpose ------		Balanced CPU and memory (As name suggestes used for general purpose)
+
+provide a balance of compute, memory and networking resources, and can be used for a variety of diverse workloads. 
+These instances are ideal for applications that use these resources in equal proportions such as web servers and code repositories. 
+ex. web servers, containerized microservices, caching fleets, and distributed data stores, as well as development environments
+
+A, M, T  serise instance are General Purpose Instances
+Instance Available in four sizes 
+1. Nano
+2. Small
+3. Medium
+4. Large
+
+A Series contain Medium and Large instance only
+These instances are well suited for below application
+1- webserver
+2- containerized micro service
+
+M Series contain Large instance only
+these contains m4 & m5 containers
+M4
+-For heavy work load
+-Instance Storage are EBS only
+
+M5
+Balance cpu, memory and networking resource for broad  range of application
+It higher than M4
+Instance Stroge are EBS & NVM SSD
+
+T series contain all four types of instances.
+These type of instances used in
+1- create website & web application 
+2- code  repositories
+3 - development, build or test server
+ 
+***  Compute Optimized --------	When we reuire more CPU than RAM 
+This type contains 'C' series
+for c4 instances Storage EBS only
+for c5 instances STorage EBS & NVM SSD
+
+these are ideal for compute bound applications that benefit from high performance processors. 
+Instances belonging to this family are well suited for batch processing workloads, media transcoding, high performance web servers,
+ high performance computing (HPC), scientific modeling, dedicated gaming servers and ad server engines, machine learning inference
+
+C5 instance can support  max 25 EBS volumes to 1 instance
+C5 uses new ec2 hypervisor 
+
+
+*** Memory Optimized --------	More RAM instances
+Memory optimized instances are designed to deliver fast performance for workloads that process large data sets in memory.
+ex.  high performance databases, distributed web scale in-memory caches, mid-size in-memory databases
+
+These type of instance contains 3 series of instances
+R - Series
+storage EBS & NVM SSD
+X - Series
+storage NVM SSD
+Z - Series
+Storage NVM SSD
+
+
+***  Accelerated Computing /GPU ------		Graphics Optimised  (used for gaming etc)
+these instances use hardware accelerators, or co-processors, to perform functions, such as floating point number calculations, graphics processing,
+ or data pattern matching, more efficiently than is possible in software running on CPUs
+These type of instance contains 3 series of instance
+F -  Series
+These instance offer FPGA h/w
+Storage - NVM SSD
+P -  Series
+Storage - SSB & EBS
+G -  Series
+
+
+- Storage Optimized ------		Low latency 
+Storage optimized instances are designed for workloads that require high, sequential read and write access to very large data sets on local storage
+ex: NoSQL databases (e.g. Cassandra, MongoDB, Redis), in-memory databases
+
+It has 3 series of instances
+D Series
+storage SSD
+H Series
+Storage HDD
+I Series 
+Storage NVM SSD
+
+Below two type of instance comes new into the market 
+
+- High Memory  --- High RAM  & Nitro system
+These instances contains high RAM and runs on nitro system
+Nitro system is the type of specialised hypervisor which used for virtualization which used server resources very intelligently 
+Also minimize the latency and increase the throughput,also optimise the RAM which improves the performance of RAM 
+It has only 1 series of instances
+U series
+
+- Previous Generation
+
+
+Ec2 purchasing option
+* On Demand
+When we select any ec2 instance it comes with On demand option.
+* Dedicated Instance
+* Dedicated Host
+* Spot Instance 
+* Schedule  Reserved Instance
+* Reserved Instance
+
+There are 3 ways to pay for Ec2 instnace 
+On Demand
+Reserved Instance
+Spot instance
+
+02240500600
+
+
+
+
+

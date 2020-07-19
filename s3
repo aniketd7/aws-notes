@@ -1,0 +1,137 @@
+Difference between S3, EBS, EFS
+
+- Before start of s3 we should know what is block level storage and object level storage.
+ex: suppose we have an 100M of excel file on desktop or laptop.
+In Block Level Storage - suppose our block level size is 512K (i.e. each block will contains 512kb)
+if we save 100M  excel on disc it will divide in chunks and it requres 200 block to store 100M file.
+Now if we do small change in that excel file , it will change that perticular block only whcih contains
+the changed data.
+
+Where as in  Object Level Storage: if we do a small change in excel entire file must be removed and new file needs to be put there (100 M in our case)
+
+If we have to do very fast read and write operation we use Block Level Storage
+where as if you going to put some file once in a while and after that it will be continuously read then object storage is the right solution.
+
+In AWS 
+EBS is the block storage where as S3 is object level storage.
+
+EFS (Elastic File System)
+if you want to have file system which should be mounted on different server at the same time.
+like shared file system (NFS). It is a block level disc which can be mount on ec2
+the good thing is
+one EFS volume can be mounted to N no. of different ec2 machines within a region  
+
+When you create an EFS volume it gets replicated accross different AZ within that region
+
+if u have one ec2 in AZ (a) another ec2 in AZ (b) then u can mount same EFS in both the ec2
+you can mount  it on perimeses server also 
+
+Aws storage and storage class both are different things
+Aws storege is the stroge types which aws has offered like 
+s3
+EFS
+FSx
+S3 Glacier
+Storage Gateway
+AWS Backup
+
+- AWS Storage Service
+Amazon EBS (Elastic Block Store)
+Amazon EFS (Elastic File System)
+Amazon s3 Glacier -- store arichival data. i.e. the data which we don't required frequently
+AWS Storage Gateway -  its gateway between 2 platforms. suppose we have data in on premises and we need to move amazon s3. storage gateway lets give us to move data from that env to this env   
+Amazon S3 Storage
+snoboll
+
+- Storage Classes:
+1. Standard --- Designed for frequently access data
+2. Standard Infrequent Access -- Designed for Long-lived, infrequently accessed data
+3. Glacier --- Design for Long-term data archiving with retrieval times ranging from minutes to hours
+ 
+There are 6 types of storage class (all are object storage)
+1. s3 standard
+- This is the default class. this is fast and low latency period
+- This is the costliest comapre to other classes
+- There is no charge of retrival
+- The storage class for the object is fairly high but their is very less charge for accessing the object.
+where as in other class there is no storage cost but they charge for accessing the object
+ 
+2. Amazon S3 Glacier Deep Archive (S3 Glacier Deep Archive)
+- This is cheapest class compare to other classes. This is long term storage
+- Generaly u can store the data which can accessed once or twice in a year.
+- Retrival time is within 12 hrs
+- minimum storage duration charge 180 days
+
+3. Amazon S3 Glacier (S3 Glacier)
+-same as deep archive this is for long term storage
+-minimum storage duration is 90 days
+- this also provides 3 retrival option to access the object
+1. eiter retrive within minutes
+2. either  retrive withing cople of hours
+3. either retrive upto 12 hrs
+- we can upload object directly to the glacier or us lifecycle policy
+- we can retrive 10G of data from glacier per month with free tier account
+ 
+4. Amazon S3 Standard-Infrequent Access (S3 Standard-IA)
+If you are sure about data that u will require this data or not require this data then we use standard IA
+- this is like s3 standard only. in this class if u access the data regularly but not daily basis
+but it would charge you on retrival basis
+- It is for data that is require less frequently but require rapid access when needed.
+- storage cost is cheaper than s3 standard almost half of the price but charge more heavily for accessing the object.
+- minimum storage duration charge 30 days.
+i.e. if you remove object before 30 days, still it will charge for 30 days only.
+ 
+5. Amazon S3 One Zone-Infrequent Access (S3 One Zone-IA)
+This is also same as infrequent access (standard -IA). u can keep here less frequent access data but require as 4-5 times in a month but not so imp.
+which means in worst condidtion even if the data is currupt it will not affect to u. 
+it is 20% more cheaper than standard -IA
+This keep the data only in 1 AZ. apart from this all other class keep the data in atleast 3 AZ.
+
+6. Amazon S3 Intelligent-Tiering (S3 Intelligent-Tiering)
+If ther data is UNCERTAIN (i.e if u dont know whether u will access the data or not) then u will use S3 Intelligent-Tiering. 
+- In this class amazon keep the data in s3 standard & standard -IA bydefault but u can use any storage class
+and amazon manages the data where to keep either in standard or in infrequent access
+- here u don't need use lifecycle mgmt. it will do on its own. But stll we can use the lifecycle mgmt if we want. as this class uses only 2 class bydefault.
+if u want to use more than 2 then we can use lifecycle mgmt.
+- it will not charge u for movement of object from standard to IA or any other class
+- object less than 128kb will not move to standard IA. it will remain in standard only
+
+In Intelligent- Tiering
+suppose we keep the data in s3 standerd and after 30 days it moved to infrequent access and suppose if we access that data after 30 days
+then again it move back to s3 standard. 
+
+Lifecycle Management 
+We can decide the lifecycle of data.
+for ex : we can set the lifesycyle like 
+if we keep the data in s3 standard and we dont access that in 30days then move that data in infrequent Access.
+If we still don't access that data for 90 days then we can move to glacier.
+but in the normal scenario if we access after going to glacier then it will access from glacier only.
+
+
+
+- Explain s3 versioning.
+Versioning allows us to keep multiple variants of an object in a bucket. Versioning helps us to restore an object to a previous or specific version of an object. 
+advantage of versioning to recover a deleted or mistakenly overwritten object.
+In other words, if versioning is enable then if we upload 1  file which is already present it will not override the existing file.
+
+-- Cross region replication
+which means if you create 1 bucket in any region and u want to replicate that object in another region then u will use this feature.
+you need to configure cross region replication,  by selecting bucket --> clicking management tab --> replication buttion 
+then u need to configure like in which region u want to copy the object., also u need to create one bucket in that region, also u need to create IAM to replicate the object etc 
+Note: if you want to enable CRR - cross region replication then versioning should be enable othere wise we can't set CRR.
+
+-- S3 transfer Acceleration
+this enables fast, easy, and secure transfers of files over long distance between your client and s3 bucket
+The normal speed of upload we do it on s3 bucket is not that fast that we do it on transfer acceleration.
+it makes our transfer of data from local system to cloud is much more faster.
+this is used when u need to transfer or move data from one location to another
+It uses the service called cloudFront Edge location
+so s3 acceleration transfer the data to edge location so that it can be move to ur s3 bucket at a quicker pace 
+
+- what is s3fs
+This use to mount aws s3 bucket in linux local machine 
+It is a FUSE filesystem. amazon s3 supports it. It can be operate with 2 different menthod 
+1. command method
+In this type of mode, s3fs is eligible for managing Amazon s3 buckets in several efficient methods.
+2. Mount method-
+It is used to mount the Amazon s3 bucket as a local file system

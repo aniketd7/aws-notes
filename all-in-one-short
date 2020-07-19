@@ -1,0 +1,149 @@
+All in One (volumes-ec2-s3-vpc-elb-auto scalaing)
+
+VOLUMES:
+		1. Instance Store:
+							Used to store temp. data. if we shutdown or terminate the instance then data will be loss.
+							We can use for cache, buffer or temp storage.
+		
+		2. EBS			:
+							Its divided in to 5 volumes types. in that 3 are of SSD and 2 are HDD
+							For Root Volume We used Only SSD's 
+							For External Volume we can use both SSD's and HDD
+							SSD:
+								Performance measured in IOPS
+								1. gp2
+								2. io1
+								3. Magentic
+								
+							HDD:
+								Perforamnce measured in Throughputs
+								1. st1 (Throughputs Optimize)
+								2. sc1 (Cold HDD)
+
+
+EC2:
+	AMI:
+		This is template for creation of ec2. this contains image of os and other custom software.
+		To take backup of ec2 instance we need to take snapshot of volumes.
+		We can scale up horizontally or vertically
+		
+	Instance Type :
+					There are 5 instance type.
+					1. General Purpose (for general use)
+					2. Compute Optimise	(higher CPU)
+					3. Memory Optimise (Higher RAM)
+					4. Storage Optimise (Storage)
+					5. Accelerate Optimise /GPU (Higher grapics gaming purpose)
+					
+	Purchasing Option:
+					1. On demand (by default this option selected)
+					2. Dedicated Instance
+					3. Dedicated Host
+					4. Spot Instance
+					5. Schedule Reserved Instance
+					6. Reserved Instance
+					
+	Pay for ec2 instnace:
+					There are 3 ways to pay for Ec2 instnace
+					1. On demand
+					2. Reserved Instance 
+					3. Spot Instance
+											
+Storage:
+		1. Block Level Storage  - stores the data in blocks. if 1 file size 10mb and block size is 512kb then to save 10mb file it uses 20 blokcs
+								  and if we change anything in that file then it will change that perticular block only which contains the change
+								  data. so if we want fast read and write we use block storage
+								  EBS, EFS comes under Block level Storage 
+		2. Object Level Storage - Here if we do any changes in 10mb file then entire file will removed in new update file puts there.
+								  if you going to put some file once in a while and after that it will be continuously read then object storage 
+								  is the right solution.
+								  S3 comes under Object Level Storage
+
+	
+Storage Service:
+				Storage service offered by AWS are below
+				1. s3
+				2. EBS
+				3. EFS
+				4. S3-Glacier
+				5. AWS Storage Gateway -- suppose we have data in on premises and we need to move amazon s3. storage gateway lets give us to move 												  data from that env to this env
+				6. AWS Backup
+				7. Snowball
+		
+				  	
+S3:
+	Storage Classes:
+					This are S3 storage classes. aws charge for data depending on these classes. below are the 3 main storage classses 
+					1. Standard - Designed to stored frequent access data
+					2. Standard Infrequent Access - Designed for long-lived, Infrequent Access data
+					3. Glacier - Design for Long-term data archiving with retrieval times ranging from minutes to hours.
+	
+	There are total 6 types of storage classes. and all are based on Object Storage
+		1. Standard:
+					default class, fast and low latency, costly comare to other storage class
+					no charge of retrival
+					to store the object cost is high but access the object cost is very less
+					for other classes stroge cost very low or no cost but access cost high
+					
+		2. Amazon S3 Glacier Deep Archive:
+					cheapest compare to other storage class, long term storage
+					generally store the data which can access once or twice in a year.
+					retrival time within 12hrs, minimum storage duration charge 180 days.
+					
+		3. Amazon S3 Glacier:
+					same as deep archive, long term storage
+					minimum storage duration 90 days
+					retrival option:
+					1. either retrive within minutes
+					2. either retrive couple of hrs
+					3. either retrive upto 12 hrs
+					
+		4. Amazon S3 Standard Infrequent Access (S3 standard-IA):
+					this is like S3 Standard but would charge on retrival basis.
+					use this when require less frequently but require rapid access.
+					storage cheaper than s3 standard but charge heavily to access
+					storage duration charge 30 days
+					
+		5. Amazon One Zone Infrequent Access (S3 one zone-IA):
+					Same as s3 standard-IA. would require data 4-5 times in month and not so imp.
+					20% cheaper than standard-IA. in worst case if data is currupt then also not affect to u.
+					keep the data in one AZ only. all other class keeps minimum 3 az's
+					
+		6. Amazon S3 Intelligent Tiering:
+					Suppose we keep data in s3 standard and after 30 days it gets moved to standard IA. after 30 days
+					if we access that data then again it moved automatically to s3 standard.
+					
+					
+   Life Cycle Management:
+   						we can decide the life cycle of data. 
+   						i.e suppose if we put any file in s3 then if not access in certain given time, then it automatically
+   						move to standard IA, one zone , glacier or deep archive as per our requiremnt. which save the cost.
+   						to set -- s3 --> go to bucket --> properties --> management --> lifecycle 
+   						
+   						
+   Versioning:
+   				Versioning allows us to keep multiple variants of an object in a bucket.
+   				advantage of versioning to recover a deleted or mistakenly overwritten object.
+   				to enable -- s3 --> go to bucket --> properties --> versioning --> select enable option.
+   				
+   				
+   Cross Region Replication:
+   				which means if you create 1 bucket in any region and u want to replicate that object in another region then u 
+   				will use this feature. To enable cross region replication then versioning should be enable for that bucket.
+   				to enable -- s3 --> go to bucket --> properties --> managment --> replication --> select enable option.
+   
+   S3 transfer Acceleration:
+   				This enables fast, easy, and secure transfers of files over long distance between your client and s3 bucket.
+   				if we upload object on the s3 is not that fast compare to s3 transfer accelaration. we use when we need to 
+   				upload huge amt of data.
+   				It uses the service called cloudFront Edge location
+   				
+   				
+   	S3FS:
+   			This use to mount aws s3 bucket in linux local machine. It is a FUSE filesystem. amazon s3 supports it.
+   				1. command method:
+								In this type of mode, s3fs is eligible for managing Amazon s3 buckets in several efficient methods.
+				2. Mount method:
+								It is used to mount the Amazon s3 bucket as a local file system.
+					
+	

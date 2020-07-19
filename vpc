@@ -1,0 +1,168 @@
+- We can create upto 5 vpc inside region.
+- We can create 200 subnet under 1 VPC
+- We can allocate max 5 elastic ip. if we want to use more than 5 then we need to request aws.
+- Once we create a vpc below will get created automatically by default.
+
+1. DHCP
+2. NACL - Network Access Control List
+3. Security Group
+
+- Once the vpc is created we can not change the CIDR block range
+- When we create a vpc, we can use cidr range in between /16 to /28
+- the 1st four ip and last ip in each subnet is reserved by aws
+ 1st ip used for Netmask Address
+2nd is reserved by aws for the vpc router
+3rd  is reserved by aws for DNS server
+4th is reserved by aws for future purpose.
+last ip used for broadcast Address 
+
+VPC is of 2 types
+
+1. Default VPC
+When we create our aws account that time we will get one default vpc in every region.
+2. Custom VpC
+We create this vpc as per our requirement 
+
+To create vpc 
+4 stpes are require.
+1. create vpc
+2. create subnet
+3. create IGW (internet Gateway)
+4. create Routing table
+
+Public Subnet:
+if a subnet's trafic is routed through an internet gateway, it called as public subnet 
+
+Private Subnet:
+if a subnet does not have a route through internet gateway it called as private subnet
+
+-What is Tenancy in vpc.
+We will get this option while creating  custom vpc.
+
+there are 2 option 
+1. Default
+2. Dedicated 
+Bydefault is Default which means we can host any ec2 instance 
+if its set to Dedicated means we can only launch dedicated instances.
+
+
+Subnets: 
+there are 4 subnet 2 privates and 2 public
+Need to give name tag for subnet
+then there is VPC option- here select the name custom vpc name which we have created earlier.
+Availablility zone - Here we need to select the AZ in the region in which u have created vpc
+CIDR block - here we need to assign  the ip's which we want assign to subnet
+
+when we assign an ip range to subnet in that 5 ips are reserved in each subnet . i.e we can not used    
+these ips.
+1st four ips in the subnet 
+last ip in the subnet.
+
+Router:
+- It connects different az's together and connect the vpc to the internet gateway 
+- You can have upto 200 route table per vpc
+- you can have upto 50 Route entries per route table
+- Each subnet must be associates with only one route table
+ - We can not associate muiltiple subnet with one route table 
+
+Route Tables
+When we create any vpc 1 route table gets created bydefault. that is called MAIN route table of your vpc.
+We will create one more route table i.e  total 2 route table
+
+
+for 1st we will set name public-RT
+then we will create one more route table will give name Private-RT
+and we will select the vpc in which we want to create Route Table (RT)
+
+One we will associate to public subnet and another to the private subnet
+If we dont associates any RT to subnet then MAIN RT will get associated to all the subnet
+
+
+To Associate RT 
+go to subnet Associates tab and add private RT to private subnet and public RT  to public subnet
+
+Note: 1 subnet can only have 1 RT BUT 1 RT can associate to muiltiple subnets.
+
+Internet GateWay (IGW)
+
+- This allows connectivity from vpc to outside internet. Once this IGW is created we need to attached it to vpc.
+- Default vpc bydefault connect with IGW. In custom vpc we need to attached IGW
+- You can attached only 1 IGW to the vpc.
+- It support ipv4 and ipv6
+
+Now go to route table and in public-RT add route policy
+if any inbound traffic from internet  it will redirect to IGW
+
+
+NAT GateWays (NATGW)
+- It helps all the internet bound traffic which is getting originated from private instances to go to internet and then it gets reply from 
+internet and gives it to private instances 
+for ex.  
+DB servers are in private subnet , and this server needs to download some packages or os  level patches from the internet.
+So, it will originate traffic to internet and bcos private instances are not going to have public ip, then it 1st sends the traffic to NAT GW
+and NAT GW sends to the internet, and gets the reply back and gives to the private instances 
+- We can only assign elastic ip to NATGW
+
+Always keep the NAT GW in public subnet 
+so, create a NAT GW and assign a public subnet, then create a elastic ip.
+
+Now go to privet-RT and add the route policy
+anything which is internet bound traffic that will send to NATGW
+
+
+Security Group
+- operates at instance level
+- It support allow rules only
+- it is stateful return traffic (outbound rule) is automatically allowed 
+- applies to instances only
+
+NACL (Network ACL)
+- it works on subnet level
+- it support allow and deny
+- It is stateless, return traffic must be explicitly allowed by rules
+- applies to all instances in the subnet
+- It is an optinal layer of security for your vpc that act as a firewall for controlling traffic in and out for one or more subnet
+
+What is the difference between Statfull and Stateless Filtering? 
+Stateful: 
+remember the state of the data stream passed through (what happened in all previous packets) 
+and filter based on the same list as in case of stateless, but filter also based on state information.
+For example, a stateful filter that allows inbound traffic to TCP port 80 on a webserver will allow the return traffic, 
+usually on a high numbered port (e.g., destination TCP port 63, 912) to pass through the stateful filter between the client and the webserver. 
+
+Stateless: 
+don't remember any state, just filter the current packet passing through according to the rule list.
+ In the above example, two rules would need to be implemented on the filtering device: one rule to allow traffic 
+inbound to the web server on TCP port 80, and another rule to allow outbound traffic from the webserver (TCP port range 49,152 through 65,535).
+
+VPC Peering
+- This used to communicate between two different vpc using private ipv4 address or iv6
+- You can create a VPC peering connection between yoour own vpc, or with the vpc in another aws account.
+
+
+*** VPC ENDPOINT *** 
+If you want to use aws resources whithout using internet.
+
+Earlier if private subnet instances wants to use internet then at that time we create NAT gateway in public subnet
+and using NAT gw private instance used to conect to internet
+But the issue with NAT gw is, whatever data we transfer through NAT gw  we need to pay for that per gb. also we need to pay for NAT gw also for using this.
+
+Whereas VPC Endpoint is free and data transfer cost also very less.
+
+In other words, VPC Endpoint enables you to privately connect your vpc to supported aws services Instances in your vpc co not require public ip address 
+to communicate with resources in the service.
+
+
+*** VPN Connection *** 
+We use VPN when none of our server will be internet facing. So, to access these server we use VPN.
+
+
+
+
+
+
+
+
+
+
+   

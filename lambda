@@ -1,0 +1,15 @@
+- It is a Platform As A Service (PAAS) with a remote platform to run & execute your backend code
+- Its a automated version of ec2
+- for  executing  background task only .
+- automatic scale depends upon the traffic.
+- pay the amount of time only the code is executed
+- We can run only python, nodejs, java, Go,ruby,.net languages only.
+Defination: It is serverless compute service
+
+To use this service we need to use SDK (Software Devlopment Kit) provided by aws
+
+AWS SDK's
+It is an API which is used by developers to desire service they want.
+These SDK's are used by IDE's 
+i.e. Eclipse 
+Visual Studio

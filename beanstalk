@@ -1,0 +1,155 @@
+Beanstalk
+
+- Its an PAAS (Platform As A Service) service used to deploy and scaling web application.
+- In this Load balancing, auto scaling , appliction health monitoring all handelled by AWS Beanstalk.
+
+Features --
+1. it is fastest and simplest way to deploy application on aws
+2. only focus on developing code. server manging and monitoring details would be handelled by beanstalk
+3. It automatically scales up or down depnding on our application needs
+Most IMP:
+4. It gives  freedom to access underlying technology
+i.e. you can change the predefined configuration
+
+
+Funamentals of Beanstalk
+
+1. application
+When we deploy our application it creates a seperate folder folder which is dedicated to our application.
+this term is called APLLICATION
+
+2. Apllication Version
+suppose we have written a code and deploy it on beanstalk. but now we want to make certain  changes 
+then we do changes in files and deploy it again. So we have 2 versions of our application
+It provides the features to deploy different versions of an application without deleting older versions.
+
+3. Environments
+It is place whrer we actual runs our application.
+It gives features to set muiltiple  env for single application.
+for ex. if i want different env for diff stages of my app.
+env for devlelopment satge
+env for production stage 
+env for testing stage
+
+4. Environment Tier
+when we try to launch beanstalk, it ask you to choose among 2 env tier
+1. webserver env
+When your app handles HTTP request then we use webserver env 
+2. worker env
+when we wants to handle background task then we use worker env
+
+
+5. Env health
+based on how our application running it shows the health of our env it uses different color 
+Grey -- indicates that env is being updated 
+Green - indicates passed  recent health check 
+Yellow - indicates failed one or more checks
+Red - failed 3 or more checks
+
+
+Architecture of Elastic Beanstalk 
+
+WEBSERVER ENV  contains below componant
+1 beanstalk env
+launch app on env.
+
+2. elastic load balancer 
+ It distribute load on muiltiple ec2 instance
+when we launch env a url is  created and its a form of cname is point to load balancer 
+when app receives a req. it forwarded to ELB (load balancer) and this distribute req among ec2 instance of auto scaling group
+
+3. Auto Scaling Group
+depending on web server traffic auto scaling group install or remove ec2 instances 
+
+4. EC2 instances
+when we launce beanstalk will assign a suitable instances 
+
+5. Host Manager
+it runs on every ec2 instance that has been assign to application.
+it provide detail report regarding performance of your app.
+provides instance level events 
+monitor application log file 
+and manages app server 
+
+6. Security Groups
+it is firewall for your application   
+
+
+WORKER ENV
+It is a process that handles background task during resources intensive (consuming max resources) or Time-intensive operation 
+also we can use to send email notification, generate metric report, clean up databases
+
+FLOW of WOKER ENV
+1. client has made a req to web server
+2. the req is time consuming and resource consuming
+3. so it passes this req to SQS queue
+4. now when we try to install worker env there is a DAEMON which pulls all the messages from SQS.
+5. then DAEMON sends this task to application 
+6. application resolves this task and it response with HTTP response option
+ 
+
+
+
+ukvuser
+ukvuser123
+
+
+
+
++===================================+
+| New Account Info                  |
++===================================+
+| Domain: kokonbhavan.tymra.com
+| Ip: 103.228.152.25 (n)
+| HasCgi: n
+| UserName: kokonbhava
+| PassWord: +&TZGMS[.L-0
+| CpanelMod: paper_lantern
+| HomeRoot: /home
+| Quota: 4.88 GB
+| NameServer1: v3a3.smartdomains.in
+| NameServer2: v3a4.smartdomains.in
+| NameServer3: 
+| NameServer4: 
+| Contact Email: 
+| Package: 5 GB Silver
+| Feature List: default
+| Language: en
++===================================+
+
+User: kokonbha_dbase
+Database: kokonbha_dbase
+Password: R*pZ)2tq^sRp
+
+IP: 103.228.152.25
+Domain: kokonbhavan.tymra.com
+User: stage@kokonbhavan.tymra.com
+Password: 24gVmLwS^$tQ
+
+
+Admin Url: https://admin.google.com/conv.in/AdminHome?pli=1&fral=1#
+
+Reseller URL: https://admin.google.com/partner/console/
+user:- admin@convmail.com
+pass:- uvw1uvw2!@#
+
+Url: https://43.231.124.128:2087
+User: root
+Password: 49oL!9R4Q3!gl3&
+
+JITO
+FTP:
+Domain: jito.org
+IP: 103.10.234.243
+User: mat
+Password: Cy+L8#c5R
+
+DB: kmsnmsol_old
+User: mat
+Password: K6%!0d;JK8a1o
+
+
+
+
+
+

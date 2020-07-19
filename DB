@@ -1,0 +1,148 @@
+DBMS - Database Management System
+DBMS is of 4 types:
+1. Hierarchical
+2. Network
+3. Relational (RDBMS)
+4. Object Oriented
+
+Normally used DBMS is Relational and No-Relational (NoSQL)
+
+
+NoSql DB 
+
+1. Columnar DB
+Informations are gets save in column based
+Cassendra, HBase these database are based on Columnar Database.
+
+- A columnar database is a DBMS that store the data in column instead of Rows
+- In a columnar DB all the coulmn 1 value are physically together followed by all the 
+column 2 values.
+for EX;
+| id | Name | Age | Bonus |
+| 1  | abc       | 25    | 2000    |
+|2   | pqr       | 21    | 3000    |
+|3   | xyz        | 28   | 4000    |
+
+In row oriented DBMS that data would store like this 
+( 1, abc,25,2000 ; 2,pqr,25,3000 ; 3,xyz,28,4000)
+
+In column based DBMS, the DB would store like this
+(1,2,3 ; abc,pqr,xyz ;  25,21,28 ; 2000,3000,4000 ) 
+
+Because of columnar based DB is self indexing. it uses less disk space that RDBMS containg the same data.
+It easily perform oprations like min,max,avg 
+
+2. Document DB
+Information gets save in document form 
+mongoDB, CouchDB, RavenDB
+
+- Document DB make it easier for developers to store and quering data in a database  by using the same document 
+model format they use in application format.
+- Document DB are efficient for stroing catalouge
+- Store semi structure data as document typically in JSON or XML format.
+
+Example: 
+suppose we want to find movies release in year 2016 or comedy movies, or search based on IMDB rating. 
+noramlly that data store in Document based database
+
+suppose in netflix we select one movie, below of that movie we get some information related to that movie.
+like starcast of that move, release date of that movie, rating of that movie, director of that movie
+like this info are store in Document related DB
+
+A document database is great choice for contain management application such as blog and video platform
+3. Key Value DB
+This save the info. in key value form
+Radis,DynamoDB, tokyo Cabinate , amazon elasticache
+- Key value DB is a simple database that uses an associative array as a fundamental model where each key is 
+associated with one and only one value in a collection
+- It allows horizontal scaling 
+- used in shopping cart and session store in application like fb, twitter 
+- this improve application performance by storing critical piece of data in memory for low latancy accesses
+- Amazon Elasticache store in memory key value store  
+
+4. Graph Base DB
+this is in the form of garphical form
+Neo4J, FlockDB these are based on graph based DB
+
+- a graph base database is basically a collection of nodes and and edges.
+Each node represents an entity and each edge represents a connection 
+
+			real brother
+Ashish  ------------------------------ Aneesh 
+
+
+here, Ashish and Aneesh is entity  and real brother is Edge
+
+
+*** AWS Relational Database Service ***
+
+AWS fully managed Database service will contain
+i.e below mange by aws
+- Security and patching 
+- Automated Backup
+- software update for Database engine
+- If we select muilti AZ with syncroneous replication between active and standby DB instance
+then automated fail over if muilti AZ option selected  
+- by default, every DB has weekly maintainance window (max 35 days)
+
+
+Settings manged by user
+-  Manageing DB setting (username, passwd etc)
+-  Creating relational DB schema
+-  DB performance tunning
+
+
+AWS gives 6 DB options
+1. MS SQL Server
+2. MySQL
+3. Oracle 
+4. AWS Aurora
+5. Postgress SQL
+6. Mariadb
+
+
+- You can select muilti az option at the time if DB creation only. later on we cant use this option for that DB.
+- muilti az will create on different availability zone but in the same region
+- we can not even create in same az
+- muilti az is synchroneous replication (i.e. if we do anything in primary it will auto updated on standby DB)
+- we can not read/write on standby RDS instance DB
+- we cannot specify any perticulare az for standy instance. AWS select on its own.
+- we can view on which AZ aws has created standby DB after DB creation.
+
+
+IN what condition standby become primary DB 
+- IF primary DB is inaccessible (here Db is inaccessible)
+- If primary DB instance az is not accessible (i.e issue in AZ)
+- Loss of n/w connectivity with primary DB instance
+- Loss of primary ec2 instance  (here instance is not accessible)
+- EBS failuer of primary ec2 instance
+- primary db instance settings changes
+- patching the os of db instance
+- manual failover (in case of reboot)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,70 @@
+Root Device Types is of 2 types
+
+- Elastic Block Storage (EBS) -- This is the default type now.
+- Instance Store
+	This is also known as Epehemeral (i.e. Temporary) Storage.
+
+
+Instance Store 
+
+It is used for temp. storage. 
+in this you can not stop/start the instance. 
+if u reboot or terminate the instance you will lose the data.
+
+What are the chances to lose the data.
+
+-- The underlying disk drive fails 
+-- The instance Stops
+-- The instance terminates
+
+When to use these type of root device
+
+for buffer , caches , scratch data and other temporary content.
+
+How to use Instace store root device 
+
+Launch Instance --> (In left Hand side select ) Community AMIs -->  Root device type  --> Instance store
+
+----------------------------------------------------------------------------
+
+Elastic Block Storage (EBS)
+
+This EBS contains 5 EBS volume types
+Normally volume performace is measured by IOPS(Input Output Per Second).
+For all the EBS volume category 80,000 IOPS/Instance 
+
+In 5  Root Vol Types 3 are SSD and 2 are HDD
+
+SSD :
+1. GP2
+2. io1
+3. magnetic
+Performance is measured in IOPS
+
+HDD:
+1. st1
+2. Sc1 
+Performance is measured in Throughputs 
+--------------------------
+For Root Volumes : GP2, Io1, Magnetic	we can use these 3 only.
+For addition volumes: we can use all the 5 i.e. GP2, io1, magnetic, st1, sc1
+--------------------------
+1. GP2 	SSD	: General Purpose SSD:  	Min volume size : 1G		Max : 16TB ,	MAX IOPS: 16000
+We can use this for : Boot Volume,  Low-Latency intensive apps, Dev & Test env.
+for 1G = 3 IOPS	Min 100 / 3000 Burstable
+
+2. io1 SSD		:  Provisoned IOPS : 	Min Volume Size : 4G		Max : 16TB
+We can use this for DB servers , Nosql, Prod env
+1 GB == 50 IOPS, 	Max IOPS: 64.000 IOPS
+
+3. Magnetic 	: 	Min vol : 1G 	Max Vol : 1TB
+We can use for low cost storage 		IOPS not applicable for this.
+
+4. St1		:	Throughput optimized 	HDD min 	: 500G,		Max:	16TB
+We can use for BigData operations, Data warehouses, Log process
+500 MB/S throughputs
+
+5. Sc1		:	Cold HDD: 		Min  vol size 	:	500GB,		Max: 	16TB
+We  can use for less frequent access data.
+
+
